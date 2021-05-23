@@ -6,21 +6,24 @@ function out() { printf "%s\n" "$*" >&1; } # stdout for output to be consumed by
 function msg() { printf "%b\n" "$*" >&2; } # stderr for messaging to be read by users; may use color if [ -t 2 ] is true
 
 function info() {
+  local -r pre="$(basename "$0"):"
   local -r col_='\033[1;32m' # light green
   local -r _col='\033[0m'
-  if [ -t 2 ]; then msg "$col_$*$_col" && return 0; else msg "--- $*" && return 0; fi
+  if [ -t 2 ]; then msg "$col_$pre $*$_col" && return 0; else msg "$pre --- $*" && return 0; fi
 }
 
 function warn() {
+  local -r pre="$(basename "$0"):"
   local -r col_='\033[1;33m' # light orange
   local -r _col='\033[0m'
-  if [ -t 2 ]; then msg "$col_$*$_col" && return 0; else msg "warn: $*" && return 0; fi
+  if [ -t 2 ]; then msg "$col_$pre $*$_col" && return 0; else msg "$pre warn $*" && return 0; fi
 }
 
 function error() {
+  local -r pre="$(basename "$0"):"
   local -r col_='\033[1;31m' # light red
   local -r _col='\033[0m'
-  if [ -t 2 ]; then msg "$col_$*$_col" && return 0; else msg "error: $*" && return 0; fi
+  if [ -t 2 ]; then msg "$col_$pre $*$_col" && return 0; else msg "$pre error $*" && return 0; fi
 }
 
 function exit_on_error() {
@@ -118,5 +121,5 @@ esac
 exit_on_error $? "$SERVICE failed\n"
 
 info "done."
-info ""
+echo ""
 exit 0

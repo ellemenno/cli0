@@ -1,7 +1,7 @@
 # cli0
 _(cleo)_ cli zero —a simple shell script skeleton with no dependencies
 
-Good for whipping up a quick tool with some familiar comforts:
+Good for whipping up a quick command line tool with some familiar comforts:
 - argument parsing
 - usage info
 - colored output (when appropriate) that goes to [the right place](https://man7.org/linux/man-pages/man3/stdout.3.html)

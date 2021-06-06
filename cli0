@@ -90,7 +90,12 @@ function see_things() {
 }
 
 
-if [ $# -eq 0 ]; then usage && exit 2; fi # usage as an error message, send to stderr ( &2, default )
+if [ $# -eq 0 ]; then 
+  warn "no service specified"
+  msg "\n"
+  usage # usage as part of a user message, send to stderr ( &2, default )
+  exit 2;
+fi
 
 while [ $# -gt 0 ]
 do
@@ -99,7 +104,7 @@ do
   case $opt in
     -h|--help)
       shift # past option
-      usage 1 && exit 0 # program asked to generate output, so explicitly send to stdout ( &1 )
+      usage 1 && exit 0 # usage explicitly requested as output, send to stdout ( &1 )
       ;;
 
     foo|bar|baz|say|see)
@@ -108,8 +113,7 @@ do
       ;;
 
     *)      # unmatched option
-      msg "\n"
-      warn "error: unknown option '$opt'."
+      warn "unknown option '$opt'."
       msg "\n"
       exit 1
       ;;
@@ -145,8 +149,7 @@ case $SERVICE in
     ;;
 
   *)    # unmatched option
-    msg "\n"
-    warn "error: unknown service '$SERVICE'"
+    warn "unknown service '$SERVICE'"
     msg "\n"
     exit 1
     ;;

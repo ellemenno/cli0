@@ -17,5 +17,5 @@ usage:
 
 options:
   -h --help   show this usage info
-  <service>   foo, bar, baz
+  <service>   see, say, foo, bar, baz
 ```

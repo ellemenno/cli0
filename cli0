@@ -43,7 +43,7 @@ usage:
 
 options:
   -h --help   show this usage info
-  <service>   see, say, flip
+  <service>   say, see, flip
 
 EOM
 }

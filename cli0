@@ -6,19 +6,19 @@ function out() { printf "%s\n" "$*" >&1; } # stdout for output to be consumed by
 function msg() { printf "%b" "$*" >&2; } # stderr for messaging to be read by users; may use color if [ -t 2 ] is true; BYONL (newlines not supplied here)
 
 function log() {
-  local -r hue="$1" # [0,1];[30-37]m ..e.g. 0;32m for plain green, 1;31m for bold red
-  local -r label="$2" # when not printing color (to terminal), label will be added for differentiation
+  local -r hue="$1" # e.g. 32m for plain (dim) green, 91m for bold (bright) red
+  local -r label="$2" # when not printing color (i.e. not a terminal), label will be added for differentiation
   shift; shift
-  local -r pre="$(basename "$0"):"
-  local -r col_='\033['; local -r _col='\033[0m'
+  local pre="$(basename "$0"):"
+  local col_='\033[' _col='\033[0m'
   if [ -t 2 ]; then msg "$col_$hue$pre $*$_col\n" && return 0; else msg "$pre $label $*\n" && return 0; fi
 }
 
-function debug() { log '0;37m' '::' "$*" ; } # plain/dark white
-function note()  { log '0;36m' '--' "$*" ; } # plain/dark cyan
-function info()  { log '0;32m' '---' "$*" ; } # plain/dark green
-function warn()  { log '0;33m' 'warn' "$*" ; } # plain/dark orange
-function error() { log '1;31m' 'error' "$*" ; } # bold/light red
+function debug() { log '37m' '::' "$*" ; } # dim white
+function note()  { log '36m' '--' "$*" ; } # dim cyan
+function info()  { log '32m' '---' "$*" ; } # dim green
+function warn()  { log '33m' 'warn' "$*" ; } # dim orange
+function error() { log '91m' 'error' "$*" ; } # bright red
 
 function exit_on_error() {
   local -r exit_code=$1
@@ -43,7 +43,7 @@ usage:
 
 options:
   -h --help   show this usage info
-  <service>   see, say, foo, bar, baz
+  <service>   see, say, flip
 
 EOM
 }
@@ -54,21 +54,25 @@ function rando() {
   shuf -i "$lo"-"$hi" -n 1
 }
 
-function do_thing() {
-  local -r svc="$1"
+function flip() {
   local -r rn=$(rando 0 100)
 
-  msg "$svc $rn\n"
-  if [[ "$rn" -gt 49 ]]; then return 1; else return 0; fi
+  if [[ "$rn" -lt 49 ]]; then
+    msg "($rn) heads, i lose\n"
+    return 1;
+  else
+    msg "($rn) tails, i win\n"
+    return 0;
+  fi
 }
 
 function say_things() {
   local -r rn=$(rando 0 100)
 
   debug "this is a debug message"
-  note "this is a note message"
-  info "this is a info message"
-  warn "this is a warn message"
+  note  "this is a note message"
+  info  "this is an info message"
+  warn  "this is a warn message"
   error "this is an error message"
 
   return 0
@@ -111,7 +115,7 @@ do
       usage 1 && exit 0 # usage explicitly requested as output, send to stdout ( &1 )
       ;;
 
-    foo|bar|baz|say|see)
+    flip|say|see)
       SERVICE="$opt"
       shift # past value
       ;;
@@ -125,19 +129,9 @@ do
 done
 
 case $SERVICE in
-  foo)
-    note "preparing to foo.."
-    do_thing "foo"
-    ;;
-
-  bar)
-    note "starting to bar.."
-    do_thing "bar"
-    ;;
-
-  baz)
-    note "beginning to baz.."
-    do_thing "baz"
+  flip)
+    note "preparing to flip.."
+    flip
     ;;
 
   see)

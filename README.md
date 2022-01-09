@@ -1,4 +1,4 @@
-# cli0
+# `cli0`
 _(cleo)_ cli zero —a simple shell script skeleton with no dependencies
 
 Good for whipping up a quick command line interface with some familiar comforts:
@@ -8,7 +8,7 @@ Good for whipping up a quick command line interface with some familiar comforts:
 
 ## usage
 
-cli0 doesn't really do anything out of the box; it provides a template to be modified for your own purposes:
+`cli0` doesn't really do anything out of the box; it provides a template to be modified for your own purposes:
 
 ```console
 $ ./cli0
@@ -22,7 +22,7 @@ options:
   <service>   say, see, flip
 ```
 
-cli0 provides sample service implementations to exercise the template and output formatting options:
+`cli0` provides sample service implementations to exercise the template and output formatting options:
 
 ![./cli0 say](say.png "terminal output sample")
 
